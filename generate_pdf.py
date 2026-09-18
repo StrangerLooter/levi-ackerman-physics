@@ -70,16 +70,28 @@ MARGIN_T = 1.8 * cm
 MARGIN_B = 1.8 * cm
 TEXT_W   = PAGE_W - MARGIN_L - MARGIN_R
 
-# Aesthetic Palette (Military Dark Navy & Survey Corps Gold)
-C_BG      = HexColor('#0D1117')    # Dark navy header/footer bands
-C_PANEL   = HexColor('#161B22')    # Dark card background
-C_GOLD    = HexColor('#C8A96E')    # Survey Corps emblem gold
-C_BLUE    = HexColor('#3E6B99')    # Steel blue accent
-C_RED     = HexColor('#B23B3B')    # Warning red
-C_GREEN   = HexColor('#2E7D32')    # Safe green
-C_WHITE   = HexColor('#F0F0F0')    # Clean off-white
-C_GREY    = HexColor('#777777')    # Subtle grey
-C_TEXT    = HexColor('#1A1A1A')    # Deep readable body text
+# ── Dimensions & Palette (Academic White & Charcoal Aesthetic) ───────────────
+PAGE_W, PAGE_H = A4
+MARGIN_L = 2.0 * cm
+MARGIN_R = 2.0 * cm
+MARGIN_T = 1.8 * cm
+MARGIN_B = 1.8 * cm
+TEXT_W   = PAGE_W - MARGIN_L - MARGIN_R
+
+# Academic Paper Palette (Pure White, Deep Charcoal, Muted Slates)
+C_BG      = HexColor('#FFFFFF')    # Pure white background
+C_PRIMARY = HexColor('#111827')    # Deep academic charcoal/black
+C_TEXT    = HexColor('#1F2937')    # Deep readable body text
+C_MUTED   = HexColor('#4B5563')    # Muted secondary text
+C_RULE    = HexColor('#1F2937')    # Clean dark academic rule
+C_BORDER  = HexColor('#E5E7EB')    # Light gray container border
+C_PANEL   = HexColor('#F9FAFB')    # Soft off-white callout background
+C_ACCENT  = HexColor('#1E3A8A')    # Deep academic slate blue
+C_GOLD    = HexColor('#785E2F')    # Subtle dark antique bronze (restrained accent)
+C_RED     = HexColor('#991B1B')    # Academic dark crimson
+C_GREEN   = HexColor('#166534')    # Academic forest green
+C_WHITE   = HexColor('#FFFFFF')    # White
+C_GREY    = HexColor('#6B7280')    # Subtle grey
 
 # ── Font Engineering & Unicode Registration ──────────────────────────────────
 from reportlab.pdfbase import pdfmetrics
@@ -116,16 +128,16 @@ BODY = make_style('Body', fontName='DejaVuSerif', fontSize=9.5,
 BODY_BOLD = make_style('BodyBold', fontName='DejaVuSerif-Bold', fontSize=9.5,
                        leading=14.0, textColor=C_TEXT, alignment=TA_JUSTIFY)
 
-H1 = make_style('H1', fontName='DejaVuSans-Bold', fontSize=15.5,
-                textColor=C_BG, spaceBefore=12, spaceAfter=6, leading=19,
+H1 = make_style('H1', fontName='DejaVuSans-Bold', fontSize=14.5,
+                textColor=C_PRIMARY, spaceBefore=11, spaceAfter=5, leading=18,
                 keepWithNext=True)
 
-H2 = make_style('H2', fontName='DejaVuSans-Bold', fontSize=12.0,
-                textColor=C_BG, spaceBefore=10, spaceAfter=4, leading=15,
+H2 = make_style('H2', fontName='DejaVuSans-Bold', fontSize=11.5,
+                textColor=C_PRIMARY, spaceBefore=9, spaceAfter=3, leading=15,
                 keepWithNext=True)
 
-H3 = make_style('H3', fontName='DejaVuSans-BoldOblique', fontSize=10.0,
-                textColor=C_BLUE, spaceBefore=6, spaceAfter=3, leading=13,
+H3 = make_style('H3', fontName='DejaVuSans-BoldOblique', fontSize=9.5,
+                textColor=C_ACCENT, spaceBefore=6, spaceAfter=2, leading=13,
                 keepWithNext=True)
 
 CAPTION = make_style('Caption', fontName='DejaVuSerif-Italic', fontSize=8.0,
@@ -137,7 +149,7 @@ ABSTRACT = make_style('Abstract', fontName='DejaVuSerif-Italic', fontSize=9.0,
                       alignment=TA_JUSTIFY, leftIndent=14, rightIndent=14)
 
 LABEL_STYLE = make_style('Label', fontName='DejaVuSans-Bold', fontSize=8,
-                         textColor=C_WHITE, alignment=TA_CENTER)
+                         textColor=C_PRIMARY, alignment=TA_CENTER)
 
 SMALL = make_style('Small', fontName='DejaVuSerif', fontSize=8.2,
                    leading=11.5, textColor=HexColor('#333333'))
@@ -149,7 +161,7 @@ REF_STYLE = make_style('Ref', fontName='DejaVuSerif', fontSize=7.5,
 # ── Flowables & Helpers ──────────────────────────────────────────────────────
 
 class HRule(Flowable):
-    def __init__(self, width=None, color=C_GOLD, thickness=1):
+    def __init__(self, width=None, color=C_RULE, thickness=0.6):
         super().__init__()
         self.w = width or TEXT_W
         self.color = color
@@ -166,9 +178,9 @@ class HRule(Flowable):
 
 
 class SidebarBox(Flowable):
-    """Callout box with colored left border."""
-    def __init__(self, text, width=TEXT_W, bg=HexColor('#F4F7FC'),
-                 border=C_BLUE, label='', fontsize=9.5):
+    """Callout box with subtle academic left border."""
+    def __init__(self, text, width=TEXT_W, bg=HexColor('#F9FAFB'),
+                 border=HexColor('#1F2937'), label='', fontsize=9.2):
         super().__init__()
         self._text = text
         self._label = label
@@ -176,7 +188,7 @@ class SidebarBox(Flowable):
         self.bg = bg
         self.border = border
         self.fontsize = fontsize
-        self._para = Paragraph(text, make_style('SB', fontName='DejaVuSerif',
+        self._para = Paragraph(text, make_style(f'SB_{abs(hash(text))%10000}', fontName='DejaVuSerif',
                                fontSize=fontsize, leading=fontsize * 1.38,
                                textColor=C_TEXT, alignment=TA_JUSTIFY))
 
@@ -190,20 +202,24 @@ class SidebarBox(Flowable):
         c = self.canv
         w, h = self.width, self.height
         c.setFillColor(self.bg)
-        c.roundRect(0, 0, w, h, 3, stroke=0, fill=1)
+        c.roundRect(0, 0, w, h, 2, stroke=0, fill=1)
+        c.setStrokeColor(HexColor('#E5E7EB'))
+        c.setLineWidth(0.5)
+        c.roundRect(0, 0, w, h, 2, stroke=1, fill=0)
         c.setFillColor(self.border)
-        c.rect(0, 0, 4, h, stroke=0, fill=1)
+        c.rect(0, 0, 3.5, h, stroke=0, fill=1)
         if self._label:
-            c.setFont('DejaVuSans-Bold', 7.5)
-            c.drawString(12, h - 12, self._label)
+            c.setFont('DejaVuSans-Bold', 7.8)
+            c.setFillColor(HexColor('#111827'))
+            c.drawString(12, h - 11, self._label)
         self._para.drawOn(c, 12, 6)
 
 
 def label_para(tag, text, style=BODY):
     """Inline canon/model/assumption tag."""
     tag_colors = {
-        'CANON': '#1565C0', 'MODEL': '#4A148C', 'ASSUMPTION': '#BF360C',
-        'ESTIMATE': '#1B5E20', 'PHYSICS': '#006064', 'FICTIONAL LIMIT': '#880E4F',
+        'CANON': '#1E3A8A', 'MODEL': '#374151', 'ASSUMPTION': '#92400E',
+        'ESTIMATE': '#4B5563', 'PHYSICS': '#166534', 'FICTIONAL LIMIT': '#991B1B',
     }
     col = tag_colors.get(tag, '#333333')
     label_html = f'<font color="{col}"><b>[{tag}]</b></font> '
@@ -248,13 +264,13 @@ def section_header(number, title, subtitle=''):
     """Clean numbered section header with keepWithNext."""
     items = []
     items.append(Spacer(1, 6))
-    num_text = f'<font color="#C8A96E"><b>{number}</b></font>  {title}'
+    num_text = f'<font color="#111827"><b>{number}</b></font>  {title}'
     items.append(Paragraph(num_text, H2))
     if subtitle:
         items.append(Paragraph(f'<i>{subtitle}</i>', make_style('SubT',
-            fontName='DejaVuSans-Oblique', fontSize=8.5, textColor=C_GREY,
+            fontName='DejaVuSans-Oblique', fontSize=8.5, textColor=C_MUTED,
             spaceAfter=3, keepWithNext=True)))
-    items.append(HRule(color=C_GOLD, thickness=0.5))
+    items.append(HRule(color=C_RULE, thickness=0.5))
     items.append(Spacer(1, 4))
     return items
 
@@ -262,31 +278,40 @@ def section_header(number, title, subtitle=''):
 # ── Page Header and Footer Canvas Callbacks ───────────────────────────────────
 
 def draw_page_header(c, page_title=''):
-    c.setFillColor(C_BG)
-    c.rect(0, PAGE_H - 0.85*cm, PAGE_W, 0.85*cm, stroke=0, fill=1)
-    c.setFont('DejaVuSans-Bold', 7)
-    c.setFillColor(C_GOLD)
-    c.drawString(MARGIN_L, PAGE_H - 0.58*cm,
-                 'THE MATHEMATICS AND PHYSICS OF ODM GEAR')
-    c.setFont('DejaVuSans', 7)
-    c.setFillColor(HexColor('#CCCCCC'))
-    if page_title:
-        c.drawRightString(PAGE_W - MARGIN_R, PAGE_H - 0.58*cm, page_title)
-    else:
-        c.drawRightString(PAGE_W - MARGIN_R, PAGE_H - 0.58*cm,
-                          'Levi Ackerman  ·  Constrained Dynamical Model')
+    c.saveState()
+    # Clean running header
+    c.setFont('DejaVuSans', 7.5)
+    c.setFillColor(HexColor('#4B5563'))
+    c.drawString(MARGIN_L, PAGE_H - 1.1*cm, 'THE MATHEMATICS AND PHYSICS OF ODM GEAR')
+    c.setFont('DejaVuSerif-Italic', 7.5)
+    c.setFillColor(HexColor('#6B7280'))
+    right_text = page_title or 'Levi Ackerman  ·  Constrained Dynamical Model'
+    c.drawRightString(PAGE_W - MARGIN_R, PAGE_H - 1.1*cm, right_text)
+
+    # Thin clean rule
+    c.setStrokeColor(HexColor('#D1D5DB'))
+    c.setLineWidth(0.4)
+    c.line(MARGIN_L, PAGE_H - 1.25*cm, PAGE_W - MARGIN_R, PAGE_H - 1.25*cm)
+    c.restoreState()
 
 
 def draw_page_footer(c, page_num):
-    c.setFillColor(C_BG)
-    c.rect(0, 0, PAGE_W, 0.65*cm, stroke=0, fill=1)
-    c.setFont('DejaVuSans-Bold', 7.5)
-    c.setFillColor(C_GOLD)
-    c.drawCentredString(PAGE_W / 2, 0.22*cm, str(page_num))
-    c.setFont('DejaVuSans', 7)
-    c.setFillColor(HexColor('#AAAAAA'))
-    c.drawString(MARGIN_L, 0.22*cm, 'Survey Corps Research Series')
-    c.drawRightString(PAGE_W - MARGIN_R, 0.22*cm, 'Physics  ·  Engineering  ·  2026')
+    c.saveState()
+    # Thin clean rule
+    c.setStrokeColor(HexColor('#D1D5DB'))
+    c.setLineWidth(0.4)
+    c.line(MARGIN_L, 1.4*cm, PAGE_W - MARGIN_R, 1.4*cm)
+
+    c.setFont('DejaVuSans', 7.5)
+    c.setFillColor(HexColor('#6B7280'))
+    c.drawString(MARGIN_L, 0.95*cm, 'Survey Corps Research Series')
+    c.drawRightString(PAGE_W - MARGIN_R, 0.95*cm, 'Physics  ·  Engineering  ·  2026')
+
+    # Bold page number
+    c.setFont('DejaVuSans-Bold', 8.5)
+    c.setFillColor(HexColor('#111827'))
+    c.drawCentredString(PAGE_W / 2, 0.95*cm, str(page_num))
+    c.restoreState()
 
 
 def on_later_pages(canvas_obj, doc):
@@ -298,78 +323,73 @@ def on_later_pages(canvas_obj, doc):
 
 
 def build_cover_page(canvas_obj, doc):
-    """Full-bleed cinematic cover page."""
+    """Clean publication-quality academic cover page matching Gojo reference."""
     canvas_obj.saveState()
     w, h = PAGE_W, PAGE_H
 
-    # Background
-    canvas_obj.setFillColor(C_BG)
+    # Pure white background
+    canvas_obj.setFillColor(white)
     canvas_obj.rect(0, 0, w, h, stroke=0, fill=1)
 
-    # Cover image
-    if os.path.exists(COVER_IMG):
-        cover_h = h * 0.62
-        cover_w = cover_h * 0.75
-        cover_x = (w - cover_w) / 2
-        cover_y = h * 0.28
-        canvas_obj.drawImage(COVER_IMG, cover_x, cover_y, cover_w, cover_h,
-                             preserveAspectRatio=True, mask='auto')
-
-    # Gold top banner
-    canvas_obj.setFillColor(C_GOLD)
-    canvas_obj.rect(0, h - 1.2*cm, w, 1.2*cm, stroke=0, fill=1)
-    canvas_obj.setFillColor(C_BG)
-    canvas_obj.setFont('DejaVuSans-Bold', 8.5)
-    canvas_obj.drawCentredString(w/2, h - 0.8*cm,
-        'SURVEY CORPS PHYSICS SERIES  ·  MATHEMATICAL MECHANICS VOLUME I')
-
-    # Subtle scientific coordinate grid
-    canvas_obj.setStrokeColor(HexColor('#1E2840'))
-    canvas_obj.setLineWidth(0.3)
-    for xi in range(0, int(w)+1, 30):
-        canvas_obj.line(xi, 0, xi, h)
-    for yi in range(0, int(h)+1, 30):
-        canvas_obj.line(0, yi, w, yi)
-
-    # Title card container
-    title_box_y = 0.5*cm
-    canvas_obj.setFillColor(HexColor('#0D1117F0'))
-    canvas_obj.rect(MARGIN_L, title_box_y, w - MARGIN_L - MARGIN_R,
-                    h*0.25, stroke=0, fill=1)
-
-    # Gold divider line
-    canvas_obj.setStrokeColor(C_GOLD)
-    canvas_obj.setLineWidth(1.8)
-    canvas_obj.line(MARGIN_L, title_box_y + h*0.25 - 3, w - MARGIN_R,
-                    title_box_y + h*0.25 - 3)
+    # Top series identification
+    canvas_obj.setFont('DejaVuSans', 8.0)
+    canvas_obj.setFillColor(HexColor('#4B5563'))
+    canvas_obj.drawCentredString(w/2, h - 2.2*cm,
+        'SURVEY CORPS PHYSICAL SCIENCES  ·  MATHEMATICAL MECHANICS VOLUME I')
 
     # Main title
-    canvas_obj.setFillColor(C_WHITE)
-    canvas_obj.setFont('DejaVuSans-Bold', 21)
-    canvas_obj.drawCentredString(w/2, title_box_y + h*0.185,
-        'THE MATHEMATICS AND PHYSICS OF ODM GEAR')
+    canvas_obj.setFillColor(HexColor('#111827'))
+    canvas_obj.setFont('DejaVuSerif-Bold', 21.0)
+    canvas_obj.drawCentredString(w/2, h - 3.4*cm,
+        'The Mathematics and Physics of ODM Gear')
 
-    canvas_obj.setStrokeColor(C_GOLD)
-    canvas_obj.setLineWidth(0.6)
-    canvas_obj.line(MARGIN_L + 2*cm, title_box_y + h*0.16,
-                    w - MARGIN_R - 2*cm, title_box_y + h*0.16)
+    # Subtitle
+    canvas_obj.setFillColor(HexColor('#374151'))
+    canvas_obj.setFont('DejaVuSerif-Italic', 11.5)
+    canvas_obj.drawCentredString(w/2, h - 4.15*cm,
+        "A Physical Model of Levi Ackerman's Three-Dimensional Movement")
 
-    canvas_obj.setFillColor(C_GOLD)
-    canvas_obj.setFont('DejaVuSans-Bold', 11.0)
-    canvas_obj.drawCentredString(w/2, title_box_y + h*0.13,
-        'A Physical Model of Levi Ackerman\'s Three-Dimensional Movement')
+    # Thin divider rule above image
+    canvas_obj.setStrokeColor(HexColor('#1F2937'))
+    canvas_obj.setLineWidth(0.8)
+    canvas_obj.line(MARGIN_L, h - 4.7*cm, w - MARGIN_R, h - 4.7*cm)
 
-    canvas_obj.setFillColor(HexColor('#BBBBBB'))
+    # Central framed manga plate of Levi Ackerman
+    if os.path.exists(COVER_IMG):
+        cover_h = 14.8 * cm
+        cover_w = cover_h * 0.75
+        cover_x = (w - cover_w) / 2
+        cover_y = h - 5.1*cm - cover_h
+        canvas_obj.drawImage(COVER_IMG, cover_x, cover_y, cover_w, cover_h,
+                             preserveAspectRatio=True)
+        # Crisp 1pt frame around manga illustration
+        canvas_obj.setStrokeColor(HexColor('#1F2937'))
+        canvas_obj.setLineWidth(1.0)
+        canvas_obj.rect(cover_x, cover_y, cover_w, cover_h, stroke=1, fill=0)
+
+    # Thin divider rule below image
+    canvas_obj.setStrokeColor(HexColor('#1F2937'))
+    canvas_obj.setLineWidth(0.8)
+    canvas_obj.line(MARGIN_L, h - 20.6*cm, w - MARGIN_R, h - 20.6*cm)
+
+    # Author and Affiliation metadata block
+    canvas_obj.setFillColor(HexColor('#111827'))
+    canvas_obj.setFont('DejaVuSerif', 10.0)
+    canvas_obj.drawCentredString(w/2, h - 21.8*cm,
+        'Survey Corps Research Division · Special Operations Squad')
+
+    canvas_obj.setFillColor(HexColor('#4B5563'))
     canvas_obj.setFont('DejaVuSans', 8.5)
-    canvas_obj.drawCentredString(w/2, title_box_y + h*0.09,
+    canvas_obj.drawCentredString(w/2, h - 22.6*cm,
         'From Constrained Dynamics and Vector Kinematics to Cable Stress and Human Load Factors')
 
-    canvas_obj.setFillColor(HexColor('#888888'))
-    canvas_obj.setFont('DejaVuSans', 7.5)
-    canvas_obj.drawCentredString(w/2, title_box_y + h*0.045,
+    canvas_obj.setFillColor(HexColor('#6B7280'))
+    canvas_obj.setFont('DejaVuSans', 8.0)
+    canvas_obj.drawCentredString(w/2, h - 23.4*cm,
         'Physics  ·  Vector Mechanics  ·  Aerodynamics  ·  Biomechanics  ·  2026')
 
     canvas_obj.restoreState()
+
 
 def create_styled_table(data, col_widths, is_header=True):
     """Create a publication-quality table with auto-wrapped paragraph cells."""
@@ -380,20 +400,23 @@ def create_styled_table(data, col_widths, is_header=True):
             uid = f"{r_idx}_{c_idx}_{abs(hash(str(cell))) % 10000}"
             if r_idx == 0 and is_header:
                 p = Paragraph(f"<b>{cell}</b>", make_style(f'TH_{uid}',
-                              fontName='DejaVuSans-Bold', fontSize=8.0, textColor=C_GOLD,
+                              fontName='DejaVuSans-Bold', fontSize=8.0, textColor=HexColor('#111827'),
                               leading=10.0, alignment=TA_LEFT))
             else:
                 p = Paragraph(str(cell), make_style(f'TD_{uid}',
-                              fontName='DejaVuSerif', fontSize=7.5, textColor=C_TEXT,
+                              fontName='DejaVuSerif', fontSize=7.5, textColor=HexColor('#1F2937'),
                               leading=9.5, alignment=TA_LEFT))
             row_cells.append(p)
         wrapped_rows.append(row_cells)
 
     t = Table(wrapped_rows, colWidths=col_widths)
     t.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), C_BG),
-        ('GRID', (0,0), (-1,-1), 0.4, HexColor('#D0D0D0')),
-        ('ROWBACKGROUNDS', (0,1), (-1,-1), [white, HexColor('#F8F8FA')]),
+        ('BACKGROUND', (0,0), (-1,0), HexColor('#F3F4F6')),
+        ('LINEABOVE', (0,0), (-1,0), 1.0, HexColor('#111827')),
+        ('LINEBELOW', (0,0), (-1,0), 0.6, HexColor('#111827')),
+        ('LINEBELOW', (0,-1), (-1,-1), 1.0, HexColor('#111827')),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [white, HexColor('#FAFAFA')]),
+        ('GRID', (0,0), (-1,-1), 0.3, HexColor('#E5E7EB')),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('TOPPADDING', (0,0), (-1,-1), 3),
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
@@ -412,7 +435,7 @@ def build_story():
 
     # ── SECTION 1: Introduction & Abstract ───────────────────────────────────
     story.append(Paragraph('Abstract', H2))
-    story.append(HRule(color=C_GOLD, thickness=0.5))
+    story.append(HRule(color=C_RULE, thickness=0.5))
     story.append(Spacer(1, 4))
 
     abst = (
@@ -437,13 +460,13 @@ def build_story():
         'mechanics predict about speed, acceleration, cable tension, energy, trajectory geometry, and '
         'human survivability? Where does the model succeed, and where does the fictional world '
         'extend beyond real-world physics?',
-        TEXT_W, bg=HexColor('#F4F7FC'), border=C_BLUE,
-        label='▸ RESEARCH QUESTION', fontsize=9.5
+        TEXT_W, bg=HexColor('#F9FAFB'), border=HexColor('#1F2937'),
+        label='▸ RESEARCH QUESTION', fontsize=9.2
     ))
     story.append(Spacer(1, 8))
 
     story.append(Paragraph('1  Introduction', H1))
-    story.append(HRule(color=C_GOLD, thickness=0.8))
+    story.append(HRule(color=C_RULE, thickness=0.6))
     story.append(Spacer(1, 4))
 
     intro1 = (
@@ -951,7 +974,7 @@ def build_story():
         '— at moderate speeds, it adheres rigorously to Newtonian laws — but because it operates at the absolute '
         'periphery of human musculoskeletal and cardiovascular tolerance. Real physics establishes the equations; '
         'fictional engineering supplies the power; and the Ackerman lineage supplies the pilot.',
-        TEXT_W, bg=HexColor('#EFF4FF'), border=C_BLUE,
+        TEXT_W, bg=HexColor('#F9FAFB'), border=HexColor('#1F2937'),
         label='▸ FINAL SYNTHESIS', fontsize=10.0
     ))
     story.append(Spacer(1, 6))
@@ -961,12 +984,12 @@ def build_story():
         'be established, reducing ODM gear to inefficient pure gas propulsion. [CANON / ART]', max_h_cm=5.0))
 
     story.append(Spacer(1, 8))
-    story.append(HRule(color=C_GOLD, thickness=0.8))
+    story.append(HRule(color=C_RULE, thickness=0.8))
     story.append(Spacer(1, 6))
 
     # ── REFERENCES ───────────────────────────────────────────────────────────
     story.append(Paragraph('References', H2))
-    story.append(HRule(color=C_GOLD, thickness=0.4))
+    story.append(HRule(color=C_RULE, thickness=0.4))
     story.append(Spacer(1, 4))
 
     refs = [

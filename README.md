@@ -5,7 +5,7 @@
 # The Mathematics and Physics of ODM Gear
 ### A Physical Model of Levi Ackerman's Three-Dimensional Movement
 
-[![PDF Download](https://img.shields.io/badge/📄_Download_PDF-8.3_MB-C8A96E?style=for-the-badge&logoColor=white)](ODM_Gear_Physics_Levi_Ackerman.pdf)
+[![PDF Download](https://img.shields.io/badge/📄_Download_PDF-6.3_MB-C8A96E?style=for-the-badge&logoColor=white)](ODM_Gear_Physics_Levi_Ackerman.pdf)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![ReportLab](https://img.shields.io/badge/ReportLab-PDF_Engine-red?style=for-the-badge)](https://www.reportlab.com/)
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-MathText_&_Diagrams-11557c?style=for-the-badge&logo=python&logoColor=white)](https://matplotlib.org/)
@@ -20,6 +20,8 @@
 ## 🎯 What Is This?
 
 This repository contains a **15-page, publication-quality academic physics essay** that applies serious Newtonian mechanics, vector dynamics, aerodynamics, material science, and human physiology to the ODM (Omni-Directional Mobility) gear used by Levi Ackerman in *Attack on Titan*.
+
+Stylistically aligned with competition-level academic physics essays (such as the Gojo Satoru "Infinity" mechanics reference), the paper adopts a **clean white academic page aesthetic** paired with **monochrome manga ink illustrations** and **minimalist publication diagrams**, harmonizing high-level theoretical physics with canonical narrative evidence.
 
 This is **not** a casual "anime science" article. It is a mathematically structured essay modelled on competition-level academic physics writing — with rigorous equations typeset via a dedicated Matplotlib STIX LaTeX math engine at 600 DPI, numbered theorems, proper uncertainty analysis, engineering data tables, and a comprehensive citation list of **real published sources** (no fabricated DOIs, no fan-wiki authority).
 
