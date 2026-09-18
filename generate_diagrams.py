@@ -41,11 +41,11 @@ def style_ax(ax, title='', xlabel='', ylabel='', bg=DARK):
     if ylabel:
         ax.set_ylabel(ylabel, color=TEXTGREY, fontsize=9)
 
-def save_fig(fig, name, dpi=200):
+def save_fig(fig, name, dpi=300):
     fig.savefig(f'diagrams/{name}', dpi=dpi, bbox_inches='tight',
                 facecolor=BG, edgecolor='none')
     plt.close(fig)
-    print(f'  OK: {name}')
+    print(f'  OK: {name} (dpi={dpi})')
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 1 — 3D trajectory in coordinate space
@@ -311,20 +311,26 @@ def diagram_free_body():
                 arrowprops=dict(arrowstyle='->', color=GREEN, lw=2.5))
     ax.text(-Fmag-2.5, 0.5, r'$\mathbf{F}_{gas}$' + '\n(thrust)', color=GREEN, fontsize=10, va='center')
 
-    # Drag (opposing velocity — assume moving left)
-    Dmag = 1.2
-    ax.annotate('', xy=(Dmag, 1.5), xytext=(0, 1.5),
-                arrowprops=dict(arrowstyle='->', color='#FF9F40', lw=2))
-    ax.text(Dmag+0.2, 1.5, r'$\mathbf{F}_D$' + '\n(drag)', color='#FF9F40', fontsize=10, va='center')
-
-    # Velocity vector
-    ax.annotate('', xy=(-3, 3.5), xytext=(0, 0),
+    # Velocity vector (tangential to swing arc, moving up-left)
+    vx, vy = -3.0, 2.5
+    v_norm = np.hypot(vx, vy)
+    v_dir = np.array([vx, vy]) / v_norm
+    ax.annotate('', xy=(vx, vy), xytext=(0, 0),
                 arrowprops=dict(arrowstyle='->', color=ACCENT2, lw=2.5, linestyle='dashed'))
-    ax.text(-3.5, 4, r'$\mathbf{v}$', color=ACCENT2, fontsize=12)
+    ax.text(vx - 0.4, vy + 0.3, r'$\mathbf{v}$ (velocity)', color=ACCENT2, fontsize=11, fontweight='bold')
+
+    # Drag (strictly opposes velocity: antiparallel to v)
+    Dmag = 1.6
+    Ddir = -v_dir
+    ax.annotate('', xy=(Dmag * Ddir[0], Dmag * Ddir[1]), xytext=(0, 0),
+                arrowprops=dict(arrowstyle='->', color='#FF9F40', lw=2.5))
+    ax.text(Dmag * Ddir[0] + 0.3, Dmag * Ddir[1] - 0.3,
+            r'$\mathbf{F}_D$' + '\n(aerodynamic drag,\nopposes ' + r'$\mathbf{v}$)', color='#FF9F40', fontsize=10, va='top')
 
     # Net force equation
-    eq = (r'$m\mathbf{a} = \mathbf{T} + \mathbf{F}_g + \mathbf{F}_{gas} + \mathbf{F}_D$')
-    ax.text(-4.5, 10, eq, color=WHITE, fontsize=10,
+    eq = (r'$m\mathbf{a} = \mathbf{T} + m\mathbf{g} + \mathbf{F}_{\mathrm{gas}} + \mathbf{F}_D$'
+          '\n' + r'Note: $F_c = m v^2/\rho$ is the net radial component, not an independent force.')
+    ax.text(-4.5, 10, eq, color=WHITE, fontsize=9.5,
             bbox=dict(facecolor=PANEL, edgecolor=ACCENT, alpha=0.9, boxstyle='round,pad=0.6'))
 
     ax.set_title('Figure 7: Free-Body Diagram — Forces on Levi During ODM Swing',
@@ -468,7 +474,7 @@ def diagram_drag_force():
                  r'$F_D = \frac{1}{2} C_D \rho A v^2$',
                  color=WHITE, fontsize=11, y=1.01)
     fig.tight_layout()
-    save_fig(fig, 'fig10_drag_force.png', dpi=200)
+    save_fig(fig, 'fig10_drag_force.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 7 — Rotational combat / angular momentum
@@ -549,7 +555,7 @@ def diagram_rotational():
                  r'$\boldsymbol{\tau} = \frac{d\mathbf{L}}{dt}$, $\mathbf{L} = \mathbf{r} \times \mathbf{p}$',
                  color=WHITE, fontsize=11, y=1.01)
     fig.tight_layout()
-    save_fig(fig, 'fig11_rotational.png', dpi=200)
+    save_fig(fig, 'fig11_rotational.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 8 — Cable stress diagram
@@ -620,7 +626,7 @@ def diagram_cable_stress():
                  r'$\sigma = T / A_c$',
                  color=WHITE, fontsize=11, y=1.01)
     fig.tight_layout()
-    save_fig(fig, 'fig12_cable_stress.png', dpi=200)
+    save_fig(fig, 'fig12_cable_stress.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 9 — G-force comparison chart
@@ -667,7 +673,7 @@ def diagram_gforce():
     ax.set_xlim(0, 55)
     ax.tick_params(colors=TEXTGREY)
 
-    save_fig(fig, 'fig13_gforce.png', dpi=200)
+    save_fig(fig, 'fig13_gforce.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 10 — Trajectory optimization (conceptual)
@@ -753,7 +759,7 @@ def diagram_optimization():
                  r'$\min J = \int_0^{t_f} P(t)\,dt$ subject to cable and body constraints',
                  color=WHITE, fontsize=11, y=1.01)
     fig.tight_layout()
-    save_fig(fig, 'fig14_optimization.png', dpi=200)
+    save_fig(fig, 'fig14_optimization.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 11 — Energy and momentum (impulse)
@@ -798,7 +804,7 @@ def diagram_energy_momentum():
                  r'$K = \frac{1}{2}mv^2$,  $\mathbf{p} = m\mathbf{v}$,  $\mathbf{F} = d\mathbf{p}/dt$',
                  color=WHITE, fontsize=11, y=1.01)
     fig.tight_layout()
-    save_fig(fig, 'fig09_energy_momentum.png', dpi=200)
+    save_fig(fig, 'fig09_energy_momentum.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DIAGRAM 12 — ODM gear schematic (component labels)
@@ -872,7 +878,7 @@ def diagram_odm_schematic():
                  '[CANON] based on official Attack on Titan descriptions',
                  color=WHITE, fontsize=10, y=0.98)
 
-    save_fig(fig, 'fig03_odm_schematic.png', dpi=200)
+    save_fig(fig, 'fig03_odm_schematic.png', dpi=300)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # MAIN

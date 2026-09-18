@@ -1,0 +1,6 @@
+# Core scientific dependencies for ODM Gear Physics Paper
+reportlab>=4.0.0
+matplotlib>=3.8.0
+numpy>=1.26.0
+pillow>=10.0.0
+pymupdf>=1.24.0

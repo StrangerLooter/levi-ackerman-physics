@@ -22,6 +22,7 @@ env/
 
 # Build outputs (root PDF is tracked)
 output/
+rendered_equations/
 
 # Temporary fix scripts (generated during build)
 fix_pdf.py

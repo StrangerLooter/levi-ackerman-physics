@@ -5,13 +5,13 @@
 # The Mathematics and Physics of ODM Gear
 ### A Physical Model of Levi Ackerman's Three-Dimensional Movement
 
-[![PDF Download](https://img.shields.io/badge/📄_Download_PDF-6.6_MB-C8A96E?style=for-the-badge&logoColor=white)](ODM_Gear_Physics_Levi_Ackerman.pdf)
+[![PDF Download](https://img.shields.io/badge/📄_Download_PDF-8.3_MB-C8A96E?style=for-the-badge&logoColor=white)](ODM_Gear_Physics_Levi_Ackerman.pdf)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![ReportLab](https://img.shields.io/badge/ReportLab-PDF_Engine-red?style=for-the-badge)](https://www.reportlab.com/)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-Diagrams-11557c?style=for-the-badge&logo=python&logoColor=white)](https://matplotlib.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-MathText_&_Diagrams-11557c?style=for-the-badge&logo=python&logoColor=white)](https://matplotlib.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-*Physics · Vector Mechanics · Aerodynamics · Material Science · 2026*
+*Physics · Vector Mechanics · Aerodynamics · Material Science · Biomechanics · 2026*
 
 </div>
 
@@ -19,9 +19,9 @@
 
 ## 🎯 What Is This?
 
-This repository contains a **29-page, publication-quality academic physics essay** that applies serious Newtonian mechanics, vector dynamics, aerodynamics, material science, and human physiology to the ODM (Omni-Directional Mobility) gear used by Levi Ackerman in *Attack on Titan*.
+This repository contains a **15-page, publication-quality academic physics essay** that applies serious Newtonian mechanics, vector dynamics, aerodynamics, material science, and human physiology to the ODM (Omni-Directional Mobility) gear used by Levi Ackerman in *Attack on Titan*.
 
-This is **not** a casual "anime science" article. It is a mathematically structured essay modelled on competition-level academic physics writing — with rigorous equations, numbered theorems, proper uncertainty analysis, engineering data tables, and a comprehensive citation list of **real published sources** (no fabricated DOIs, no fan-wiki authority).
+This is **not** a casual "anime science" article. It is a mathematically structured essay modelled on competition-level academic physics writing — with rigorous equations typeset via a dedicated Matplotlib STIX LaTeX math engine at 600 DPI, numbered theorems, proper uncertainty analysis, engineering data tables, and a comprehensive citation list of **real published sources** (no fabricated DOIs, no fan-wiki authority).
 
 ### The Central Mathematical Question
 
@@ -37,23 +37,23 @@ $$\|\mathbf{r}_L(t) - \mathbf{r}_A(t)\| = L(t)$$
 
 ## 📐 Paper Structure (14 Sections)
 
-| Section | Title | Key Mathematics |
-|---------|-------|-----------------|
-| — | **Abstract** | Central question, roadmap |
-| 1 | **Introduction** | Opening hook (Ep. 22), central constraint |
-| 2 | **What Is ODM Gear?** | Component table, dual-cable architecture |
-| 3 | **Kinematics** | $\mathbf{r}(t)$, $\mathbf{v}(t)$, $\mathbf{a}(t)$ in 3D; Levi's physical parameters |
-| 4 | **The Cable as a Mathematical Constraint** | $\|\mathbf{r}_L - \mathbf{r}_A\| = L(t)$; velocity constraint derivation |
-| 5 | **Why Straight-Line Kinematics Fails** | Tangential–normal decomposition; $a_n = v^2/\rho$ |
-| 6 | **Centripetal Force and Cable Tension** | $\mathbf{F}_c = mv^2/\rho$; full force balance $m\mathbf{a} = \mathbf{T} + \mathbf{F}_g + \mathbf{F}_\text{gas} + \mathbf{F}_D$ |
+| Section | Title | Key Mathematics & Physics |
+|---------|-------|---------------------------|
+| — | **Abstract** | Central research question, constrained dynamical model |
+| 1 | **Introduction** | Opening hook (Ep. 22), geometric distance constraint |
+| 2 | **What Is ODM Gear?** | Component taxonomy table, dual-cable architecture |
+| 3 | **Kinematics** | $\mathbf{r}(t)$, $\mathbf{v}(t)$, $\mathbf{a}(t)$ in 3D; Levi's mass ($m = 65\,\text{kg} + 15\,\text{kg} = 80\,\text{kg}$) |
+| 4 | **The Cable as a Mathematical Constraint** | $\|\mathbf{r}_L - \mathbf{r}_A\| = L(t)$; holonomic velocity constraint |
+| 5 | **Why Straight-Line Kinematics Fails** | Tangential–normal Frenet-Serret decomposition; $a_n = v^2/\rho$ |
+| 6 | **Centripetal Force and Cable Tension** | $F_{\text{net},r} = mv^2/\rho$; vector balance $m\mathbf{a} = \mathbf{T} + m\mathbf{g} + \mathbf{F}_\text{gas} + \mathbf{F}_D$ |
 | 7 | **Two-Anchor Vector Control** | $\mathbf{T}_\text{res} = \mathbf{T}_1 + \mathbf{T}_2$; manoeuvre capability table |
-| 8 | **Variable Cable Length, Energy & Momentum** | $K = \frac{1}{2}mv^2$; impulse $\Delta\mathbf{p} = \int F\,dt$ |
-| 9 | **Drag and High-Speed Limits** | $F_D = \frac{1}{2}C_D\rho A v^2$; power $P_D = F_D \cdot v$ |
-| 10 | **Levi's Rotational Combat** | $\mathbf{L} = \mathbf{r} \times m\mathbf{v}$; angular momentum conservation |
-| 11 | **Could the Cables Survive?** | $\sigma = T/A_c$; material stress table; 4 mm cable analysis |
-| 12 | **Can the Human Body Survive It?** | $n = v^2/(rg) + 1$; G-force table vs NASA/Stapp limits |
-| 13 | **Optimal Trajectory** | Constrained optimisation $\min \int P\,dt$; reality check table |
-| 14 | **Conclusion** | What physics explains; what requires fictional technology |
+| 8 | **Variable Cable Length, Energy & Momentum** | Reeling power $P = T\|\dot{L}\|$; work-energy theorem; impulse $\Delta\mathbf{p} = \int \mathbf{F}\,dt$ |
+| 9 | **Drag and High-Speed Limits** | $F_D = \frac{1}{2}C_D\rho A v^2$; cubic power barrier $P_D = F_D v$ |
+| 10 | **Levi's Rotational Combat** | $\mathbf{L} = \mathbf{r} \times m\mathbf{v}$; angular momentum conservation during cable reel-in |
+| 11 | **Could the Cables Survive?** | $\sigma = T/A_c$; wire rope mechanics; 4 mm EEIPS steel analysis |
+| 12 | **Can the Human Body Survive It?** | Apparent load factor $n_{\text{load}} = 1 + v^2/(rg)$ vs normal accel $a_n/g$; NASA/Stapp envelopes |
+| 13 | **Optimal Trajectory & Reality Check** | Constrained optimal control $\min \int P\,dt$; definitive reality check matrix |
+| 14 | **Conclusion** | What real physics explains; what fictional worldbuilding bridges |
 | — | **References** | 12 real published sources; research audit statement |
 
 ---
@@ -134,40 +134,38 @@ cd levi-ackerman-physics
 ### 2. Install dependencies
 
 ```bash
-pip install matplotlib numpy scipy reportlab pymupdf
+pip install -r requirements.txt
 ```
 
 > **Python ≥ 3.10** required. Tested on Python 3.13.
 
-### 3. Generate the scientific diagrams
+### 3. Generate the scientific diagrams (300 DPI)
 
 ```bash
 python generate_diagrams.py
 ```
 
-This creates all 12 PNG figures in `diagrams/`.
+This generates all 12 publication-ready PNG figures in `diagrams/`.
 
-### 4. Generate the PDF
+### 4. Compile the PDF paper
 
 ```bash
 python generate_pdf.py
 ```
 
-This produces `output/ODM_Gear_Physics_Levi_Ackerman.pdf` (≈ 6.6 MB, 29 pages).
+This compiles `output/ODM_Gear_Physics_Levi_Ackerman.pdf` (8.3 MB, 15 pages) and mirrors it to the repository root. All equations are automatically rendered to high-resolution STIX MathText assets in `rendered_equations/` and cached for fast incremental builds.
 
-### 5. (Optional) Render page previews
+### 5. Run the Forensic Quality Assurance Audit
 
 ```bash
-python -c "
-import pymupdf, os
-doc = pymupdf.open('output/ODM_Gear_Physics_Levi_Ackerman.pdf')
-os.makedirs('output/preview', exist_ok=True)
-for i in range(doc.page_count):
-    pix = doc[i].get_pixmap(matrix=pymupdf.Matrix(2,2))
-    pix.save(f'output/preview/page_{i+1:02d}.png')
-print(f'Rendered {doc.page_count} pages')
-"
+python qa_pdf.py
 ```
+
+The automated audit script performs:
+- Text extraction and completeness verification for all 14 sections
+- Character-level scan for missing glyphs (`■`) or replacement characters (`\ufffd`)
+- High-resolution (150 DPI) page-by-page rasterization into `output/preview/`
+- Contact sheet assembly (`output/contact_sheet.png`) for visual inspection
 
 ---
 
@@ -176,12 +174,22 @@ print(f'Rendered {doc.page_count} pages')
 ```
 levi-ackerman-physics/
 │
-├── ODM_Gear_Physics_Levi_Ackerman.pdf   ← Final output (29 pages, 6.6 MB)
+├── ODM_Gear_Physics_Levi_Ackerman.pdf   ← Final publication PDF (15 pages, 8.3 MB)
 │
-├── generate_diagrams.py                 ← Matplotlib script — 12 scientific figures
-├── generate_pdf.py                      ← ReportLab script — full PDF assembly
+├── math_renderer.py                     ← STIX MathText LaTeX rendering engine (600 DPI)
+├── generate_diagrams.py                 ← Matplotlib script — 12 scientific figures (300 DPI)
+├── generate_pdf.py                      ← ReportLab script — document assembly & layout
+├── qa_pdf.py                            ← PyMuPDF forensic quality audit & contact sheet
+├── requirements.txt                     ← Project dependencies
 │
-├── diagrams/                            ← Generated PNG assets
+├── assets/                              ← Canon artwork & scene references
+│   ├── cover_levi_odm.jpg
+│   ├── levi_3d_coordinates.jpg
+│   ├── levi_two_anchors.jpg
+│   ├── levi_rotational_attack.jpg
+│   └── levi_open_space.jpg
+│
+├── diagrams/                            ← 12 generated scientific figures
 │   ├── fig03_3d_trajectory.png
 │   ├── fig03_odm_schematic.png
 │   ├── fig05_cable_constraint.png
@@ -195,7 +203,13 @@ levi-ackerman-physics/
 │   ├── fig13_gforce.png
 │   └── fig14_optimization.png
 │
-└── README.md                            ← This file
+├── rendered_equations/                  ← Cached LaTeX equation flowable assets
+├── output/
+│   ├── ODM_Gear_Physics_Levi_Ackerman.pdf
+│   ├── contact_sheet.png                ← 15-page visual contact sheet
+│   └── preview/                         ← Page 01-15 raster previews
+│
+└── README.md                            ← Project documentation
 ```
 
 ---
