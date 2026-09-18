@@ -68,6 +68,9 @@ def run_qa():
     print(f"Total Pages: {total_pages}")
 
     PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    for stale in PREVIEW_DIR.glob("page_*.png"):
+        try: stale.unlink()
+        except Exception: pass
     page_images = []
     suspicious_glyphs = []
     sparse_pages = []

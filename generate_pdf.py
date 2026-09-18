@@ -409,7 +409,7 @@ def create_styled_table(data, col_widths, is_header=True):
             row_cells.append(p)
         wrapped_rows.append(row_cells)
 
-    t = Table(wrapped_rows, colWidths=col_widths)
+    t = Table(wrapped_rows, colWidths=col_widths, repeatRows=1 if is_header else 0)
     t.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), HexColor('#F3F4F6')),
         ('LINEABOVE', (0,0), (-1,0), 1.0, HexColor('#111827')),
@@ -418,12 +418,21 @@ def create_styled_table(data, col_widths, is_header=True):
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [white, HexColor('#FAFAFA')]),
         ('GRID', (0,0), (-1,-1), 0.3, HexColor('#E5E7EB')),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('TOPPADDING', (0,0), (-1,-1), 3),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+        ('TOPPADDING', (0,0), (-1,-1), 2),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2),
         ('LEFTPADDING', (0,0), (-1,-1), 4),
         ('RIGHTPADDING', (0,0), (-1,-1), 4),
     ]))
     return t
+
+
+def table_box(table, caption_text):
+    """Keep table and caption together to prevent awkward page splits."""
+    items = [table]
+    if caption_text:
+        items.append(Spacer(1, 2))
+        items.append(Paragraph(caption_text, CAPTION))
+    return KeepTogether(items)
 
 
 def build_story():
@@ -498,14 +507,15 @@ def build_story():
     )
     story.append(Paragraph(intro3, BODY))
 
-    story.append(Spacer(1, 4))
-    story.extend(fig_image(IMG_3D, 12.5,
-        'Figure 1: Levi Ackerman executing high-speed ODM manoeuvres in a coordinate reference frame. '
-        'The anchor points define a moving geometric distance constraint that steers his trajectory. [CANON / MODEL]'))
-
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 2: What Is ODM Gear? ────────────────────────────────────────
+    story.extend(fig_image(IMG_3D, 11.5,
+        'Figure 1: Levi Ackerman executing high-speed ODM manoeuvres in a coordinate reference frame. '
+        'The anchor points define a moving geometric distance constraint that steers his trajectory. [CANON / MODEL]',
+        max_h_cm=4.2))
+
+    story.append(Spacer(1, 4))
     story.extend(section_header('2', 'What Is ODM Gear?', 'Canonical mechanism and component analysis'))
 
     odm1 = (
@@ -527,14 +537,13 @@ def build_story():
         ['Snap Blades', 'Segmented ultra-hard steel', 'Terminal kinetic energy delivery (cutting edge)']
     ]
     t_odm = create_styled_table(odm_table_data, [3.2*cm, 5.0*cm, 8.8*cm])
-    story.append(t_odm)
-    story.append(Paragraph('Table 1: ODM gear component taxonomy with canonical vs mechanical roles. [CANON / MODEL]', CAPTION))
+    story.append(table_box(t_odm, 'Table 1: ODM gear component taxonomy with canonical vs mechanical roles. [CANON / MODEL]'))
 
     story.extend(fig_image(D_SCHEMA, 12.5,
         'Figure 2: Schematic mechanical layout of the ODM system showing gas cylinder reserves, turbine reel winches, '
-        'wire path, and dual-trigger blade grips. [CANON / MODEL]'))
+        'wire path, and dual-trigger blade grips. [CANON / MODEL]', max_h_cm=4.4))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 3: Kinematics ────────────────────────────────────────────────
     story.extend(section_header('3', 'From Anime Motion to Kinematics',
@@ -568,9 +577,9 @@ def build_story():
 
     story.extend(fig_image(D_3D, 13.0,
         'Figure 3: Simulated 3D trajectory of Levi executing sequential hook transfers between dual tree anchors. '
-        'Coordinate axes show displacement in meters. [MODEL]'))
+        'Coordinate axes show displacement in meters. [MODEL]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 4: Cable Constraint ──────────────────────────────────────────
     story.extend(section_header('4', 'The Cable as a Mathematical Constraint',
@@ -603,11 +612,11 @@ def build_story():
         'a sphere of radius L centered at r_A. However, if the winch reels the cable inward (dL/dt < 0), '
         'the velocity vector gains an inward radial component, pulling the scout toward the anchor.'))
 
-    story.extend(fig_image(D_CABLE, 12.5,
+    story.extend(fig_image(D_CABLE, 13.0,
         'Figure 4: Geometric cable constraint. Fixed cable length restricts motion to a circular/spherical arc. '
-        'Active reeling (dL/dt < 0) collapses the radius, creating inward spiral trajectories. [MODEL]'))
+        'Active reeling (dL/dt < 0) collapses the radius, creating inward spiral trajectories. [MODEL]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 5: Why Straight-Line Kinematics Fails ────────────────────────
     story.extend(section_header('5', 'Why Straight-Line Kinematics Is Not Enough',
@@ -634,11 +643,11 @@ def build_story():
         'a_n = (15)^2 / 12 = 18.75 m/s^2 ≈ 1.91 g. At high-speed combat turns (v = 25 m/s, ρ = 8 m), '
         'a_n reaches 78.1 m/s^2 ≈ 7.96 g — approaching human physiological tolerance.'))
 
-    story.extend(fig_image(D_TN, 12.5,
+    story.extend(fig_image(D_TN, 13.0,
         'Figure 5: Tangential-normal acceleration decomposition along a curved ODM trajectory. '
-        'Normal acceleration a_n points strictly toward the instantaneous center of curvature C. [PHYSICS]'))
+        'Normal acceleration a_n points strictly toward the instantaneous center of curvature C. [PHYSICS]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 6: Centripetal Force and Cable Tension ───────────────────────
     story.extend(section_header('6', 'Centripetal Force and Cable Tension',
@@ -670,20 +679,22 @@ def build_story():
         'cable tension spikes to T = 80 × (9.81 + 62.5) ≈ 5,785 N (5.8 kN) — equivalent to suspending '
         'nearly 590 kg on a single wire.'))
 
-    story.extend(fig_image(D_FBD, 12.0,
+    story.extend(fig_image(D_FBD, 13.0,
         'Figure 6: Free-body diagram of Levi during an ODM swing. Cable tension T, gravity mg, gas thrust F_gas, '
-        'and aerodynamic drag F_D combine to produce the net acceleration ma. Drag F_D opposes velocity v. [PHYSICS]'))
+        'and aerodynamic drag F_D combine to produce the net acceleration ma. Drag F_D opposes velocity v. [PHYSICS]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 7: Two-Anchor Vector Control ─────────────────────────────────
     story.extend(section_header('7', 'Two-Anchor Vector Control',
                                 'Dual-cable resultant tension and directional authority'))
 
     two1 = (
-        'A single cable constrains motion to a 2D plane passing through the anchor. Real ODM combat, however, '
-        'requires true 3D spatial agility. Levi accomplishes this by simultaneously employing dual grapples. '
-        'Let <b>r</b>_A1 and <b>r</b>_A2 be two separate anchor points. The resultant tension vector is:'
+        'A single taut, fixed-length cable constrains Levi\'s motion to a spherical surface centered on the anchor '
+        '(||<b>r</b><sub>L</sub> − <b>r</b><sub>A</sub>|| = L). Real ODM combat, however, requires true three-dimensional '
+        'spatial agility and non-spherical trajectories. Levi accomplishes this by simultaneously employing dual grapples '
+        'and active spool reeling. Let <b>r</b><sub>A1</sub> and <b>r</b><sub>A2</sub> be two separate anchor points. '
+        'The resultant tension vector is:'
     )
     story.append(Paragraph(two1, BODY))
     story.append(eq(r"\mathbf{T}_{\mathrm{res}} = \mathbf{T}_1 + \mathbf{T}_2 = T_1 \frac{\mathbf{r}_{A_1} - \mathbf{r}_L}{\|\mathbf{r}_{A_1} - \mathbf{r}_L\|} + T_2 \frac{\mathbf{r}_{A_2} - \mathbf{r}_L}{\|\mathbf{r}_{A_2} - \mathbf{r}_L\|}"))
@@ -695,23 +706,22 @@ def build_story():
     # Manoeuvre Table
     manoeuvre_table = [
         ['Manoeuvre', 'Anchor Configuration', 'Primary Mechanism'],
-        ['Lateral Slicing Swing', 'Single overhead anchor (θ = 0)', 'Gravity + centripetal arc, gas trim'],
+        ['Lateral Slicing Swing', 'Single overhead anchor', 'Gravity + centripetal arc, gas trim'],
         ['Dual-Anchor Slingshot', 'Twin symmetric forward anchors', 'T1 = T2, resultant tension accelerates along bisector'],
         ['High-G Vector Flare', 'Asymmetric anchor firing (T1 >> T2)', 'Rapid lateral redirection, high yaw moment'],
         ['Corkscrew Evasion', 'Anchor coupled with body roll', 'Asymmetric tension + axial body spin'],
         ['Direct Winch Retraction', 'Single high-elevation anchor', 'Radial winch power L_dot < 0, rapid climb']
     ]
     t_man = create_styled_table(manoeuvre_table, [4.0*cm, 5.0*cm, 8.0*cm])
-    story.append(t_man)
-    story.append(Paragraph('Table 2: Dual-anchor manoeuvre taxonomy and steering mechanics. [MODEL]', CAPTION))
+    story.append(table_box(t_man, 'Table 2: Dual-anchor manoeuvre taxonomy and steering mechanics. [MODEL]'))
 
-    story.extend(fig_image(IMG_TWOANCHOR, 12.0,
-        'Figure 7a: Levi Ackerman coordinating dual cable anchors during Titan engagement. [CANON / ART]'))
+    story.extend(fig_image(IMG_TWOANCHOR, 11.5,
+        'Figure 7a: Levi Ackerman coordinating dual cable anchors during Titan engagement. [CANON / ART]', max_h_cm=3.8))
 
-    story.extend(fig_image(D_TWO, 13.0,
-        'Figure 7b: Vector addition of dual cable tensions T1 and T2 producing controllable resultant T_res. [MODEL]'))
+    story.extend(fig_image(D_TWO, 12.0,
+        'Figure 7b: Vector addition of dual cable tensions T1 and T2 producing controllable resultant T_res. [MODEL]', max_h_cm=4.0))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 8: Energy and Momentum ───────────────────────────────────────
     story.extend(section_header('8', 'Variable Cable Length, Energy, and Momentum',
@@ -737,16 +747,17 @@ def build_story():
     story.append(Paragraph(en4, BODY))
     story.append(eq(r"\Delta\mathbf{p} = \int_{t_1}^{t_2} \mathbf{F}_{\mathrm{net}}(t)\,dt = m \Delta\mathbf{v}"))
 
-    story.append(label_para('PHYSICS',
-        'Reversing direction at 20 m/s (Δv = 40 m/s) over a turn duration of Δt = 0.5 s requires an average force of '
-        'F_avg = (80 × 40) / 0.5 = 6,400 N (6.4 kN). This severe impulsive load must be sustained entirely by the '
-        'cable, piton anchor, and Levi\'s musculoskeletal frame.'))
+    story.append(label_para('MODEL',
+        'In a simplified 1D turnaround model (Δv = 40 m/s over Δt = 0.5 s), the average required net force is '
+        'F_avg = m(Δv/Δt) = 6,400 N (6.4 kN). In flight, this dynamic load is shared among cable tension, gas thrusters, '
+        'and aerodynamic drag rather than the cable alone, but it underscores the severe transient loads transmitted '
+        'to the harness and anchor.'))
 
     story.extend(fig_image(D_ENERGY, 13.0,
         'Figure 8: Left: Kinetic energy vs velocity up to 30 m/s. Right: Impulsive force profile during a 0.5 s '
-        'direction reversal. [PHYSICS]'))
+        'direction reversal. [PHYSICS]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 9: Drag and High-Speed Limits ─────────────────────────────────
     story.extend(section_header('9', 'Drag and High-Speed Limits',
@@ -779,9 +790,9 @@ def build_story():
         'pendulum swings and use gas bursts strictly for trim.'))
 
     story.extend(fig_image(D_DRAG, 13.0,
-        'Figure 9: Aerodynamic drag force (quadratic) and drag power dissipation (cubic) as functions of flight speed. [PHYSICS]'))
+        'Figure 9: Aerodynamic drag force (quadratic) and drag power dissipation (cubic) as functions of flight speed. [PHYSICS]', max_h_cm=5.5))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 10: Rotational Combat ────────────────────────────────────────
     story.extend(section_header('10', "Levi's Rotational Combat",
@@ -812,13 +823,13 @@ def build_story():
         'his tangential speed doubles to v_2 = 20 m/s, and angular velocity quadruples (ω = v/r = 10 rad/s ≈ 95 RPM). '
         'Reeling in the cable converts stored pneumatic work into kinetic energy, accelerating blade tips to lethal impact speeds.'))
 
-    story.extend(fig_image(IMG_ROTATIONAL, 11.5,
-        'Figure 10a: Levi executing his spinning slash manoeuvre against a Titan nape. [CANON / ART]'))
+    story.extend(fig_image(IMG_ROTATIONAL, 11.0,
+        'Figure 10a: Levi executing his spinning slash manoeuvre against a Titan nape. [CANON / ART]', max_h_cm=3.8))
 
-    story.extend(fig_image(D_ROT, 12.5,
-        'Figure 10b: Angular momentum conservation during radial cable retraction. Spiral path accelerates angular velocity. [MODEL]'))
+    story.extend(fig_image(D_ROT, 12.0,
+        'Figure 10b: Angular momentum conservation during radial cable retraction. Spiral path accelerates angular velocity. [MODEL]', max_h_cm=4.0))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 11: Cable Stress and Failure Analysis ─────────────────────────
     story.extend(section_header('11', 'Could the Cables Survive?',
@@ -845,8 +856,7 @@ def build_story():
         ['Fictional Titan Alloy', 'Unknown', '> 4000', 'Unknown', 'Canon assumption for ultra-thin durability']
     ]
     t_mat = create_styled_table(mat_table, [3.6*cm, 2.8*cm, 2.8*cm, 2.8*cm, 5.0*cm])
-    story.append(t_mat)
-    story.append(Paragraph('Table 3: Mechanical properties of candidate cable materials. [PHYSICS / ENGINEERING]', CAPTION))
+    story.append(table_box(t_mat, 'Table 3: Mechanical properties of candidate cable materials. [PHYSICS / ENGINEERING]'))
 
     cs3 = (
         'For peak combat load T_peak = 4.8 kN with safety factor SF = 5 against EEIPS steel (σ_u = 1960 MPa):'
@@ -861,10 +871,10 @@ def build_story():
         'operate with a reduced safety factor (SF ≈ 3.1) during maximum combat turns — physically viable, but with '
         'little margin for structural wear.'))
 
-    story.extend(fig_image(D_STRESS, 12.5,
-        'Figure 11: Stress-strain response and cable diameter requirements across safety factor margins. [ENGINEERING]'))
+    story.extend(fig_image(D_STRESS, 13.0,
+        'Figure 11: Stress-strain response and cable diameter requirements across safety factor margins. [ENGINEERING]', max_h_cm=4.8))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 12: Human Survivability ──────────────────────────────────────
     story.extend(section_header('12', 'Can the Human Body Survive It?',
@@ -892,52 +902,51 @@ def build_story():
         ['46.2 G', 'John Stapp rocket-sled record (1951); chest-to-back (+Gx)', 'Instantaneous survival limit with full torso harness restraint']
     ]
     t_g = create_styled_table(g_table, [2.5*cm, 7.5*cm, 7.0*cm])
-    story.append(t_g)
-    story.append(Paragraph('Table 4: Physiological acceleration tolerances based on NASA-STD-3001 and Stapp (1951). [BIOMEDICAL]', CAPTION))
+    story.append(table_box(t_g, 'Table 4: Physiological acceleration tolerances based on NASA-STD-3001 and Stapp (1951). [BIOMEDICAL]'))
 
-    story.append(label_para('PHYSICS',
-        'Levi\'s harness distributes loads across thighs, buttocks, and chest (+Gx orientation during forward crouch), '
-        'where human tolerance is dramatically higher than standing upright (+Gz). While ordinary scouts would lose '
-        'consciousness during 8G manoeuvres, Levi\'s canonically unique Ackerman lineage provides a plausible '
-        'fictional rationale for superhuman cardiovascular and musculoskeletal resilience.'))
+    story.append(label_para('MODEL',
+        'In our biomechanical model, Levi\'s harness is assumed to distribute inertial loads across thighs, buttocks, '
+        'and chest (+Gx orientation during forward crouch), where human tolerance is substantially higher than in upright '
+        '(+Gz) posture. While unassisted human subjects would experience greyout or loss of consciousness during sustained '
+        '8–9 G turns without pressurized anti-G suits, Levi\'s canonically unique Ackerman lineage provides a plausible '
+        'fictional rationale for tolerating these model-estimated peak loads.'))
 
     story.extend(fig_image(D_GFORCE, 13.0,
-        'Figure 12: Comparison of ODM manoeuvre load factors against NASA and aviation physiological thresholds. [BIOMEDICAL]'))
+        'Figure 12: Comparison of ODM manoeuvre load factors against NASA and aviation physiological thresholds. [BIOMEDICAL]', max_h_cm=4.8))
 
-    story.append(Spacer(1, 8))
+    story.append(PageBreak())
 
     # ── SECTION 13: Trajectory Optimization ──────────────────────────────────
     story.extend(section_header('13', 'Optimal Trajectory and Reality Check',
                                 'Constrained dynamic optimization and reality check synthesis'))
 
     opt1 = (
-        'To determine how an elite scout navigates obstacles, we formulate the path as a constrained optimal control problem. '
-        'The objective is to minimize total energy expenditure (gas propellant plus spool work) over flight duration T:'
+        'To evaluate scout obstacle navigation, we formulate flight as an optimal control problem '
+        'minimizing total energy expenditure (propellant and spool work) over duration T:'
     )
     story.append(Paragraph(opt1, BODY))
-    story.append(eq(r"\min_{\mathbf{u}(t)} J = \int_0^T \left( P_{\mathrm{gas}}(t) + P_{\mathrm{reel}}(t) \right) dt"))
+    story.append(eq(r"\min_{\mathbf{u}(t)} J = \int_0^T \left( P_{\mathrm{gas}}(t) + P_{\mathrm{reel}}(t) \right) dt", space_before=2, space_after=2))
 
     opt2 = 'subject to the equations of motion and path distance constraints:'
     story.append(Paragraph(opt2, BODY))
-    story.append(eq(r"m\ddot{\mathbf{r}} = \mathbf{T}(\mathbf{r}, L, \mathbf{u}) + m\mathbf{g} + \mathbf{F}_{\mathrm{gas}}(\mathbf{u}) + \mathbf{F}_D(\dot{\mathbf{r}}), \qquad \|\mathbf{r}(t) - \mathbf{r}_A(t)\| \leq L(t)"))
+    story.append(eq(r"m\ddot{\mathbf{r}} = \mathbf{T}(\mathbf{r}, L, \mathbf{u}) + m\mathbf{g} + \mathbf{F}_{\mathrm{gas}}(\mathbf{u}) + \mathbf{F}_D(\dot{\mathbf{r}}), \qquad \|\mathbf{r}(t) - \mathbf{r}_A(t)\| \leq L(t)", space_before=2, space_after=2))
 
     # Reality Check Table
     reality_table = [
         ['Physical Domain', 'Analytical Result', 'Real-World Feasibility', 'Fictional Requirement'],
-        ['Moderate Swing (v ≈ 12 m/s)', 'T ≈ 2.3 kN, n ≈ 2.9 G', 'Completely plausible with real steel cable & harness', 'None; obeys standard mechanics'],
-        ['High-Speed Arc (v ≈ 25 m/s)', 'T ≈ 5.8 kN, n ≈ 8.0 G', 'Demands EEIPS 4 mm cable, elite anti-G tolerance', 'Requires full body harness coupling'],
+        ['Moderate Swing (v ≈ 12 m/s)', 'T ≈ 2.3 kN, n ≈ 2.9 G (model)', 'Plausible with standard steel cable & harness', 'None; obeys standard mechanics'],
+        ['High-Speed Arc (v ≈ 25 m/s)', 'T ≈ 5.8 kN, n ≈ 8.0 G (model)', 'Demands EEIPS 4 mm cable, elite anti-G tolerance', 'Requires full body harness coupling'],
         ['Spinning Attack (ω ≈ 10 rad/s)', 'Speed doubling via angular momentum', 'Physically valid principle (r_dot < 0)', 'Requires superhuman blade control'],
-        ['Gas Propulsion Budget', 'P_gas ≈ 1.5 – 5.0 kW', 'Exhausts real compressed air within 30 s', 'Requires fictional Iceburst Stone energy density'],
-        ['Anchor Substrate Hold', 'Piton pull-out force > 6 kN', 'Wood / masonry shears under dynamic load', 'Demands fictional ultra-hard anchor penetration']
+        ['Gas Propulsion Budget', 'P_gas ≈ 1.5 – 5.0 kW (model)', 'Exhausts real compressed air within 30 s', 'Requires fictional Iceburst Stone energy density'],
+        ['Anchor Substrate Hold', 'Piton pull-out force > 6 kN (model)', 'Wood / masonry shears under dynamic load', 'Demands fictional ultra-hard anchor penetration']
     ]
     t_real = create_styled_table(reality_table, [3.2*cm, 3.8*cm, 5.2*cm, 4.8*cm])
-    story.append(t_real)
-    story.append(Paragraph('Table 5: Definitive Reality Check — Analytical mechanics vs fictional requirements. [SYNTHESIS]', CAPTION))
+    story.append(table_box(t_real, 'Table 5: Definitive Reality Check — Analytical mechanics vs fictional requirements. [SYNTHESIS]'))
 
     story.extend(fig_image(D_OPT, 13.0,
-        'Figure 13: Simulated trajectory optimization comparing energy costs across straight, pendulum, and hybrid ODM paths. [MODEL]'))
+        'Figure 13: Simulated trajectory optimization comparing energy costs across straight, pendulum, and hybrid ODM paths. [MODEL]', max_h_cm=2.2))
 
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 2))
 
     # ── SECTION 14: Conclusion ───────────────────────────────────────────────
     story.extend(section_header('14', 'Conclusion',
@@ -945,7 +954,7 @@ def build_story():
 
     con1 = (
         'This paper has traced a single mathematical idea — the distance constraint '
-        '‖<b>r</b><sub>L</sub>(t) − <b>r</b><sub>A</sub>(t)‖ = L(t) — from its geometric origin through '
+        '||<b>r</b><sub>L</sub>(t) − <b>r</b><sub>A</sub>(t)|| = L(t) — from its geometric origin through '
         'an escalating sequence of Newtonian frameworks. In doing so, we have discovered that ODM movement '
         'is far more physically principled than commonly believed.'
     )
@@ -960,14 +969,15 @@ def build_story():
     story.append(Paragraph(con2, BODY))
 
     con3 = (
-        '<b>Where Fiction Operates:</b> Real-world physics encounters hard limits in three specific areas: '
-        '(1) <i>Gas Propellant Energy Density</i>: Iceburst Stone provides compact pneumatic power far beyond real gas cylinders; '
-        '(2) <i>Anchor Substrate Mechanics</i>: Real masonry and wood would fracture under 6 kN dynamic pull-out loads; and '
-        '(3) <i>Ackerman Physiology</i>: Sustained high-G manoeuvres at 8–10 G would incapacitate unassisted humans. '
-        'These are not arbitrary plot holes; they represent the precise boundary where fictional worldbuilding '
-        'bridges the gap between physical mechanics and heroic narrative.'
+        '<b>Where Fiction Operates:</b> Real physics encounters hard boundaries in three domains: '
+        '(1) <i>Gas Energy Density</i>: Fictional Iceburst Stone supplies compact pneumatic energy far beyond real gas cylinders; '
+        '(2) <i>Anchor Substrates</i>: Real masonry and wood shear under model-estimated dynamic pull-out loads exceeding 6 kN; and '
+        '(3) <i>Ackerman Physiology</i>: Sustained high-G manoeuvres (model estimate 8–10 G) exceed human cardiovascular tolerance (NASA-STD-3001). '
+        'These mark the precise boundary where fictional worldbuilding bridges physical mechanics and heroic narrative.'
     )
     story.append(Paragraph(con3, BODY))
+
+    story.append(PageBreak())
 
     story.append(SidebarBox(
         '<b>Final Synthesis:</b> Levi Ackerman\'s ODM movement is extraordinary not because it violates mechanics '
@@ -975,22 +985,22 @@ def build_story():
         'periphery of human musculoskeletal and cardiovascular tolerance. Real physics establishes the equations; '
         'fictional engineering supplies the power; and the Ackerman lineage supplies the pilot.',
         TEXT_W, bg=HexColor('#F9FAFB'), border=HexColor('#1F2937'),
-        label='▸ FINAL SYNTHESIS', fontsize=10.0
+        label='▸ FINAL SYNTHESIS', fontsize=9.2
     ))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 3))
 
-    story.extend(fig_image(IMG_OPENSPACE, 11.5,
+    story.extend(fig_image(IMG_OPENSPACE, 10.5,
         'Figure 14: Levi traversing an open plain. Without elevated anchor substrates, the geometric constraint cannot '
-        'be established, reducing ODM gear to inefficient pure gas propulsion. [CANON / ART]', max_h_cm=5.0))
+        'be established, reducing ODM gear to inefficient pure gas propulsion. [CANON / ART]', max_h_cm=3.2))
 
-    story.append(Spacer(1, 8))
-    story.append(HRule(color=C_RULE, thickness=0.8))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 4))
+    story.append(HRule(color=C_RULE, thickness=0.6))
+    story.append(Spacer(1, 3))
 
     # ── REFERENCES ───────────────────────────────────────────────────────────
     story.append(Paragraph('References', H2))
     story.append(HRule(color=C_RULE, thickness=0.4))
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 3))
 
     refs = [
         '[1] H. D. Young and R. A. Freedman, <i>University Physics with Modern Physics</i>, 14th ed., Pearson, 2016. '
@@ -1023,11 +1033,11 @@ def build_story():
         '[10] F. E. Guignard, "Human Tolerance to Whole-Body Acceleration," in <i>Human Factors in Aviation</i>, '
         'Academic Press, 1988. — Biomedical review of cardiovascular blackout mechanisms under high +Gz loads.',
 
-        '[11] Koei Tecmo / Omega Force, <i>Attack on Titan: Wings of Freedom</i>, Koei Tecmo Games, 2016. '
-        '— Interactive physics simulator developed in collaboration with Kodansha; consistent ODM mechanic validation.',
+        '[11] Koei Tecmo / Omega Force, <i>Attack on Titan: Wings of Freedom</i>, video game, Koei Tecmo Games, 2016. '
+        '— Officially licensed video game implementing 3D wire grappling mechanics, wire spool reeling, and momentum conservation under Kodansha supervision.',
 
-        '[12] Attack on Titan Fandom Archive, "Omni-Directional Mobility Gear Technical Specifications," 2024. '
-        '— Auxiliary reference for fan-measured visual speeds and grapple wire reel spool times.'
+        '[12] Attack on Titan Community / Fandom Technical Archive, "Omni-Directional Mobility Gear Technical Specifications," online reference, 2024. '
+        '— Community-compiled observational timings, grapple reel spool rates, and visual episode speed estimations.'
     ]
 
     for ref in refs:
