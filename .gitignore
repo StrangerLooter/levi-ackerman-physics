@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Build outputs (root PDF is tracked)
+output/
+
+# Temporary fix scripts (generated during build)
+fix_pdf.py
+fix_unicode.py
+
+# Reference PDFs (not our content)
+achmad-roykhan-sabiq_essay_competition_2026-achmad-roykhan-sabiq.pdf
+pdf_extract.txt
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
